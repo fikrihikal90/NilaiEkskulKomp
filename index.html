@@ -23,14 +23,14 @@
             appearance: none;
             -webkit-appearance: none;
         }
-        select { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234b5563%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
+        select { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fil[...]
         select:focus, input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
         .section-title { margin-top: 25px; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; font-size: 1.1rem; color: #1f2937; margin-bottom: 15px;}
         
-        .btn-simpan { width: 100%; padding: 16px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 6px rgba(37,99,235,0.2); }
+        .btn-simpan { width: 100%; padding: 16px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 15px[...]
         .btn-simpan:hover { background-color: #1d4ed8; }
         
         .hasil-box { background: #f0f9ff; padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px; border: 2px dashed #38bdf8; }
@@ -91,6 +91,16 @@
         </div>
         <button type="button" class="btn-hapus-siswa" onclick="prosesHapusSiswa()">Hapus Siswa dari Daftar</button>
 
+        <!-- PENGATURAN PERTEMUAN DINAMIS -->
+        <div style="margin-top:16px; padding-top:10px; border-top:1px dashed #cbd5e1;">
+          <label style="font-weight:bold;">Atur Jumlah Pertemuan</label>
+          <div class="grid-2">
+            <input type="number" id="maxPertemuanInput" min="1" value="6">
+            <button type="button" class="btn-tambah" onclick="setMaxPertemuan()">Simpan Jumlah</button>
+          </div>
+          <button type="button" class="btn-reset-edit" onclick="resetMaxPertemuan()">Reset Pertemuan ke 6</button>
+        </div>
+
         <button type="button" class="btn-reset-edit" onclick="resetSemuaEdit()">🔄 Kembalikan ke Daftar Asli Bawaan Sistem</button>
     </div>
 
@@ -122,14 +132,14 @@
             </select>
 
             <!-- KUMPULAN SELECT NAMA ASLI BAWAAN -->
-            <select id="sel1" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Abdul azis|4B">Abdul azis</option><option value="ALIKA OKTAVIA|4B">ALIKA OKTAVIA</option><option value="Annisa Nur maulida|4B">Annisa Nur maulida</option><option value="AQILA RAMADHINA AHMAD|4B">AQILA RAMADHINA AHMAD</option><option value="Aulia Dwi Putri|4B">Aulia Dwi Putri</option><option value="daniel|4A">daniel</option><option value="M alkafi pratama|4A">M alkafi pratama</option><option value="M. Algi fahri|4C">M. Algi fahri</option><option value="M. ZIDAN ARKAN|4B">M. ZIDAN ARKAN</option><option value="M.Ilham Anugrah|4B">M.Ilham Anugrah</option><option value="Mawar aprilia|4B">Mawar aprilia</option><option value="Mikaila Andhisni|4A">Mikaila Andhisni</option><option value="Muhamad syafe' i firdaus|4B">Muhamad syafe' i firdaus</option><option value="NUR HALIZA|4B">NUR HALIZA</option><option value="Raden Dava Syahputra|4C">Raden Dava Syahputra</option><option value="Sesillia|4C">Sesillia</option><option value="Siti mariah|5B">Siti mariah</option><option value="Siti robiatul adawiah|4A">Siti robiatul adawiah</option><option value="Siti sa'adah Zulfa|4C">Siti sa'adah Zulfa</option><option value="Syakira khumairaal zahrani|5A">Syakira khumairaal zahrani</option></select>
-            <select id="sel2" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Achmad ghalih nur alamsyah|5A">Achmad ghalih nur alamsyah</option><option value="Alby luthfy anggriawan|4A">Alby luthfy anggriawan</option><option value="Ardina sapira|6A">Ardina sapira</option><option value="Azkiya kinara azzahra|6B">Azkiya kinara azzahra</option><option value="Bilqis khoridatul bariah|5B">Bilqis khoridatul bariah</option><option value="Diandra wahyu kirania|5B">Diandra wahyu kirania</option><option value="Dinar layla ramadhan|6A">Dinar layla ramadhan</option><option value="LAILAH TAZQIAH NAFSI|6A">LAILAH TAZQIAH NAFSI</option><option value="M teguh al rizki|6B">M teguh al rizki</option><option value="M.farid Awalludin|6A">M.farid Awalludin</option><option value="M.saka|4A">M.saka</option><option value="Muhamad julfan saprudin|6B">Muhamad julfan saprudin</option><option value="muhamad rizki|6B">muhamad rizki</option><option value="Muhammad alfariz nurdiansah|6A">Muhammad alfariz nurdiansah</option><option value="Muhammad saka Wiratama|4A">Muhammad saka Wiratama</option><option value="Nathania nanda zhafitri|4C">Nathania nanda zhafitri</option><option value="Nayla humarya zidni|5A">Nayla humarya zidni</option><option value="Raden Rivania Azmavida|4A">Raden Rivania Azmavida</option><option value="Robi Maulana|4A">Robi Maulana</option><option value="Sabrina Anisa putri iskndar|6A">Sabrina Anisa putri iskndar</option></select>
-            <select id="sel3" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Afika Aulia az'zahra|6A">Afika Aulia az'zahra</option><option value="Arsyil aditia sanjaya|6A">Arsyil aditia sanjaya</option><option value="Citra Inaya|6A">Citra Inaya</option><option value="Fahri Alfar Herdiana|5B">Fahri Alfar Herdiana</option><option value="Kenzo putra Rahman|6B">Kenzo putra Rahman</option><option value="M. Ramdhani Fadilah|5B">M. Ramdhani Fadilah</option><option value="M.QURO SALIM MUBAROK|6B">M.QURO SALIM MUBAROK</option><option value="Mahira Alesha najwa|5A">Mahira Alesha najwa</option><option value="meydiva aprilia putri|6B">meydiva aprilia putri</option><option value="Muhamad akmal Maulana|5A">Muhamad akmal Maulana</option><option value="Muhamad Jabbar mukti|6B">Muhamad Jabbar mukti</option><option value="Muhamad Rifki zaelani|5B">Muhamad Rifki zaelani</option><option value="Muhammad Fadlan Ramdani|6A">Muhammad Fadlan Ramdani</option><option value="Muhammad nizam|5A">Muhammad nizam</option><option value="Muhammad Wildan Aydin Mawlana|5B">Muhammad Wildan Aydin Mawlana</option><option value="MUHAMMAD YUSUF|6B">MUHAMMAD YUSUF</option><option value="Pamela Safinah|6B">Pamela Safinah</option><option value="Widyanursaidah|5A">Widyanursaidah</option><option value="windadari|6B">windadari</option><option value="zetrisqia alqindi deanna putra|6A">zetrisqia alqindi deanna putra</option></select>
-            <select id="sel4" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Ahmad maklum|6B">Ahmad maklum</option><option value="Alvin Faeyza Shakil|6B">Alvin Faeyza Shakil</option><option value="Amelya chintya sekar dewi|6A">Amelya chintya sekar dewi</option><option value="Aqila nur sabrina|6B">Aqila nur sabrina</option><option value="Audi Tabina|5B">Audi Tabina</option><option value="AZKIA KHOERUNISA|6A">AZKIA KHOERUNISA</option><option value="Azzahra Asyila Rahma|6B">Azzahra Asyila Rahma</option><option value="Dina putri kheyira|6B">Dina putri kheyira</option><option value="H. Padli|6B">H. Padli</option><option value="Haniva zahra|6B">Haniva zahra</option><option value="M.Adin Al Khalifi|6B">M.Adin Al Khalifi</option><option value="Muhamad Dzaki Firdaus|6B">Muhamad Dzaki Firdaus</option><option value="Muhamad Fatih aldzanki|6A">Muhamad Fatih aldzanki</option><option value="muhammad adhari cahya gumelar|5B">muhammad adhari cahya gumelar</option><option value="Muhammad Azzam Zakaria|6B">Muhammad Azzam Zakaria</option><option value="nadhif ghani|5B">nadhif ghani</option><option value="Nafisa|6B">Nafisa</option><option value="nur akila rahma|6B">nur akila rahma</option><option value="Siti Aulia Natasa|5B">Siti Aulia Natasa</option><option value="Yarisman gulo|6B">Yarisman gulo</option></select>
-            <select id="jum1" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Aisyah isna yamani|4B">Aisyah isna yamani</option><option value="Ajrin Al maliki|4B">Ajrin Al maliki</option><option value="Aulia Bilqis|4C">Aulia Bilqis</option><option value="Dian harani|4C">Dian harani</option><option value="Elsa Sahilla Ramadani|4B">Elsa Sahilla Ramadani</option><option value="Fakhriyyah Bilqis|4A">Fakhriyyah Bilqis</option><option value="Kayla zakiatun nisa|4C">Kayla zakiatun nisa</option><option value="M.irsyad padil|4A">M.irsyad padil</option><option value="M.kholifatu Arsya F|4C">M.kholifatu Arsya F</option><option value="Maula Alkhansa Hasanah|4A">Maula Alkhansa Hasanah</option><option value="Muhamad azka ar rasyid|4B">Muhamad azka ar rasyid</option><option value="Muhamad Fatir Ar Rasyid|4C">Muhamad Fatir Ar Rasyid</option><option value="Muhammad Chairul Afdal|4B">Muhammad Chairul Afdal</option><option value="Muhammad Khalifah Boza Nur Rabbani|4C">Muhammad Khalifah Boza Nur Rabbani</option><option value="Najma Syarifah|4C">Najma Syarifah</option><option value="Raden Jahira Amaliah Bilqis|5A">Raden Jahira Amaliah Bilqis</option><option value="Rama dani saputra|4B">Rama dani saputra</option><option value="Siti maritul kibdiah|4A">Siti maritul kibdiah</option><option value="SITI SYAIDAH NUR ALIYAH|4C">SITI SYAIDAH NUR ALIYAH</option><option value="Siti zamilatunnazma|4A">Siti zamilatunnazma</option></select>
-            <select id="jum2" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Almira Izzatunisa|4B">Almira Izzatunisa</option><option value="daffa ahmad fairuz|6A">daffa ahmad fairuz</option><option value="Indah fatyah|5A">Indah fatyah</option><option value="M AKHDAN Al fahri|5B">M AKHDAN Al fahri</option><option value="M Davin Maulana|6A">M Davin Maulana</option><option value="M Hafizh firdaus|5B">M Hafizh firdaus</option><option value="M. Albi AF|4B">M. Albi AF</option><option value="M.ardiansah s.p|6A">M.ardiansah s.p</option><option value="M.sarip hidayat tuloh|4A">M.sarip hidayat tuloh</option><option value="Muhammad Bagir|5A">Muhammad Bagir</option><option value="muhammad fadil abdul kahfi|6A">muhammad fadil abdul kahfi</option><option value="Natasha c fricilla|5A">Natasha c fricilla</option><option value="NATHANIA NANDA ZHAFITRI|4C">NATHANIA NANDA ZHAFITRI</option><option value="Naura Nayara|4A">Naura Nayara</option><option value="riandi rahmat fajar|6A">riandi rahmat fajar</option><option value="Riska Febriana|5A">Riska Febriana</option><option value="Siti syakinah nur Irawan|4B">Siti syakinah nur Irawan</option><option value="Siti zahra|5A">Siti zahra</option><option value="UFAIRA NUR AFIFA|5A">UFAIRA NUR AFIFA</option></select>
-            <select id="jum3" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="ADERA AZZAHRA|5A">ADERA AZZAHRA</option><option value="Afril Intan Syafitri|5B">Afril Intan Syafitri</option><option value="Aisyah|5B">Aisyah</option><option value="Arsy tasyawal pauziyah|5A">Arsy tasyawal pauziyah</option><option value="Ashodikul Putra Abdulloh|5A">Ashodikul Putra Abdulloh</option><option value="Dzikra Naura Sudrajat|5B">Dzikra Naura Sudrajat</option><option value="Ira novita|6A">Ira novita</option><option value="Kanaya aljahira|5A">Kanaya aljahira</option><option value="M Davin maulana|6A">M Davin maulana</option><option value="MOHAMAD WIRA AL FAHRI|5B">MOHAMAD WIRA AL FAHRI</option><option value="Muhammad Akbar Rasyd|6B">Muhammad Akbar Rasyd</option><option value="MUHAMMAD RADEN AZMI ALMALIK|5A">MUHAMMAD RADEN AZMI ALMALIK</option><option value="Muhammad Rizqi Abdullah|5A">Muhammad Rizqi Abdullah</option><option value="Nadia Azkal Azkia|5B">Nadia Azkal Azkia</option><option value="NINDI ELIS|6A">NINDI ELIS</option><option value="Rafa Nur Ahmad|5B">Rafa Nur Ahmad</option><option value="Silvy lingga syafitri|6A">Silvy lingga syafitri</option><option value="Siti nuranisa|5B">Siti nuranisa</option><option value="Siti windayani|5A">Siti windayani</option><option value="Syafiyya amira adesya|5B">Syafiyya amira adesya</option></select>
-            <select id="jum4" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Aenur|5B">Aenur</option><option value="Ahmad fathir|6A">Ahmad fathir</option><option value="Ahmad fathur|6B">Ahmad fathur</option><option value="Alsyifa nur aulia|5B">Alsyifa nur aulia</option><option value="alya adriana|5B">alya adriana</option><option value="ARSYAD SYABIL FATURRAHMAN|4C">ARSYAD SYABIL FATURRAHMAN</option><option value="ASSYFA BILQISH MALAYEKA|4A">ASSYFA BILQISH MALAYEKA</option><option value="auliana tasya|5B">auliana tasya</option><option value="Azka dwi putra prayitno|4A">Azka dwi putra prayitno</option><option value="Dasya Aprilia Lase|5B">Dasya Aprilia Lase</option><option value="DPIKRA|5A">DPIKRA</option><option value="FILDZAH SHAKILA ADHANA|5A">FILDZAH SHAKILA ADHANA</option><option value="Johanes Reyvandio|4A">Johanes Reyvandio</option><option value="M. RAFA MAULANA|5A">M. RAFA MAULANA</option><option value="M.alfaridzi|4B">M.alfaridzi</option><option value="Nadia Azkal Azkia|5B">Nadia Azkal Azkia</option><option value="Nayla azzahra Nur sahidah|5B">Nayla azzahra Nur sahidah</option><option value="siti azkia khoirun nisa|5B">siti azkia khoirun nisa</option><option value="SYAKIA NURSALSABILA|5A">SYAKIA NURSALSABILA</option><option value="THORIQ YASIR|5B">THORIQ YASIR</option></select>
+            <select id="sel1" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Abdul azis|4B">Abdul azis</option><option value[...]</select>
+            <select id="sel2" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Achmad ghalih nur alamsyah|5A">Achmad ghalih nur alamsyah</option><option value[...]</select>
+            <select id="sel3" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Afika Aulia az'zahra|6A">Afika Aulia az'zahra</option>[...]</select>
+            <select id="sel4" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Ahmad maklum|6B">Ahmad maklum</option><option value[...]</select>
+            <select id="jum1" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Aisyah isna yamani|4B">Aisyah isna yamani</option><option value[...]</select>
+            <select id="jum2" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Almira Izzatunisa|4B">Almira Izzatunisa</option><option value[...]</select>
+            <select id="jum3" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="ADERA AZZAHRA|5A">ADERA AZZAHRA</option><option value[...]</select>
+            <select id="jum4" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Aenur|5B">Aenur</option><option value[...]</select>
         </div>
 
         <div class="grid-2">
@@ -150,14 +160,7 @@
 
         <div class="form-group">
             <label>Pertemuan Ke-</label>
-            <select id="pertemuan" required>
-                <option value="Pertemuan 1">Pertemuan 1</option>
-                <option value="Pertemuan 2">Pertemuan 2</option>
-                <option value="Pertemuan 3">Pertemuan 3</option>
-                <option value="Pertemuan 4">Pertemuan 4</option>
-                <option value="Pertemuan 5">Pertemuan 5</option>
-                <option value="Pertemuan 6">Pertemuan 6</option>
-            </select>
+            <select id="pertemuan" required></select>
         </div>
 
         <div class="section-title">💯 2. Komponen Nilai Otomatis</div>
@@ -330,6 +333,35 @@
         }
     }
 
+    // FUNGSI PERTEMUAN DINAMIS ------------------------------------------------
+    function isiPertemuan() {
+        var sel = document.getElementById("pertemuan");
+        if(!sel) return;
+        sel.innerHTML = "";
+        var max = parseInt(localStorage.getItem("maxPertemuan") || "6", 10);
+        for (var i = 1; i <= max; i++) {
+            var opt = document.createElement("option");
+            opt.value = "Pertemuan " + i;
+            opt.text = "Pertemuan " + i;
+            sel.appendChild(opt);
+        }
+    }
+
+    function setMaxPertemuan() {
+        var v = parseInt(document.getElementById("maxPertemuanInput").value, 10);
+        if (!v || v < 1) { alert("Masukkan angka pertemuan >= 1"); return; }
+        localStorage.setItem("maxPertemuan", v);
+        isiPertemuan();
+        alert("Jumlah pertemuan diatur ke " + v);
+    }
+
+    function resetMaxPertemuan() {
+        localStorage.setItem("maxPertemuan", 6);
+        document.getElementById("maxPertemuanInput").value = 6;
+        isiPertemuan();
+        alert("Jumlah pertemuan dikembalikan ke 6");
+    }
+
     // FUNGSI UTAMA PENILAIAN --------------------------------------------------
 
     function gantiDropdownNama() {
@@ -474,6 +506,11 @@
     // Eksekusi Paling Awal
     terapkanPatchSiswa();
     gantiDropdownNama();
+    isiPertemuan();
+    // sinkronkan input angka dengan value di localStorage
+    var storedMax = parseInt(localStorage.getItem("maxPertemuan") || "6", 10);
+    var maxInput = document.getElementById('maxPertemuanInput');
+    if(maxInput) maxInput.value = storedMax;
     muatTabel();
 </script>
 </body>
