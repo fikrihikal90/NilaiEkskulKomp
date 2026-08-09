@@ -48,8 +48,9 @@
         .btn-menu-edit { background: #4b5563; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
         .edit-box { background: #e5e7eb; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; border: 1px solid #d1d5db; }
         .btn-tambah { background: #16a34a; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-tambah-pertemuan { background: #0284c7; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
         .btn-hapus-siswa { background: #dc2626; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
-        .btn-reset-edit { background: #6b7280; color: white; border: none; padding: 8px; border-radius: 6px; width: 100%; font-size:0.8rem; cursor: pointer; margin-top: 15px; }
+        .btn-reset-edit { background: #6b7280; color: white; border: none; padding: 8px; border-radius: 6px; width: 100%; font-size:0.8rem; cursor: pointer; margin-top: 25px; }
     </style>
 </head>
 <body>
@@ -58,10 +59,11 @@
     <h2>💻 Penilaian Ekskul Komputer</h2>
 
     <!-- TOMBOL BUKA TUTUP MENU EDIT -->
-    <button type="button" class="btn-menu-edit" onclick="toggleEditMenu()">⚙️ Pengaturan Tambah / Hapus Siswa</button>
+    <button type="button" class="btn-menu-edit" onclick="toggleEditMenu()">⚙️ Pengaturan Tambah / Hapus Data</button>
 
     <!-- KOTAK MENU EDIT (Awalnya Tersembunyi) -->
     <div id="menuEdit" class="edit-box">
+        <!-- Pengaturan Siswa -->
         <h4 style="margin-top:0; color:#1f2937; border-bottom:1px solid #ccc; padding-bottom:5px;">➕ Tambah Siswa Baru</h4>
         <div class="form-group">
             <select id="editSesiTambah">
@@ -76,6 +78,14 @@
         </div>
         <button type="button" class="btn-tambah" onclick="prosesTambahSiswa()">Simpan Siswa Baru</button>
 
+        <!-- Pengaturan Pertemuan -->
+        <h4 style="margin-top:20px; color:#1f2937; border-bottom:1px solid #ccc; padding-bottom:5px;">📅 Tambah Pilihan Pertemuan</h4>
+        <div class="form-group" style="margin-bottom: 5px;">
+            <input type="text" id="editNamaPertemuan" placeholder="Misal: Pertemuan 13 / Ujian Praktik">
+        </div>
+        <button type="button" class="btn-tambah-pertemuan" onclick="prosesTambahPertemuan()">Tambah Pilihan Pertemuan</button>
+
+        <!-- Hapus Siswa -->
         <h4 style="margin-top:20px; color:#1f2937; border-bottom:1px solid #ccc; padding-bottom:5px;">🗑️ Hapus Siswa</h4>
         <div class="form-group">
             <select id="editSesiHapus" onchange="muatDaftarHapus()">
@@ -91,7 +101,8 @@
         </div>
         <button type="button" class="btn-hapus-siswa" onclick="prosesHapusSiswa()">Hapus Siswa dari Daftar</button>
 
-        <button type="button" class="btn-reset-edit" onclick="resetSemuaEdit()">🔄 Kembalikan ke Daftar Asli Bawaan Sistem</button>
+        <!-- Reset Keseluruhan -->
+        <button type="button" class="btn-reset-edit" onclick="resetSemuaEdit()">🔄 Kembalikan Pengaturan ke Bawaan Sistem</button>
     </div>
 
     <!-- FORM UTAMA -->
@@ -151,12 +162,20 @@
         <div class="form-group">
             <label>Pertemuan Ke-</label>
             <select id="pertemuan" required>
+                <!-- Secara default sudah tersedia hingga 12 pertemuan -->
                 <option value="Pertemuan 1">Pertemuan 1</option>
                 <option value="Pertemuan 2">Pertemuan 2</option>
                 <option value="Pertemuan 3">Pertemuan 3</option>
                 <option value="Pertemuan 4">Pertemuan 4</option>
                 <option value="Pertemuan 5">Pertemuan 5</option>
                 <option value="Pertemuan 6">Pertemuan 6</option>
+                <option value="Pertemuan 7">Pertemuan 7</option>
+                <option value="Pertemuan 8">Pertemuan 8</option>
+                <option value="Pertemuan 9">Pertemuan 9</option>
+                <option value="Pertemuan 10">Pertemuan 10</option>
+                <option value="Pertemuan 11">Pertemuan 11</option>
+                <option value="Pertemuan 12">Pertemuan 12</option>
+                <!-- Pilihan tambahan yang dibuat di pengaturan akan muncul di bawah sini -->
             </select>
         </div>
 
@@ -232,7 +251,7 @@
 </div>
 
 <script>
-    // FUNGSI KHUSUS MENU EDIT SISWA -------------------------------------------
+    // FUNGSI KHUSUS MENU EDIT SISWA & PERTEMUAN -------------------------------
     
     // Terapkan penambahan dan penghapusan saat halaman dibuka
     function terapkanPatchSiswa() {
@@ -258,6 +277,16 @@
                 elemenSelect.insertAdjacentHTML('beforeend', opsiHTML);
             }
         });
+
+        // 3. Terapkan Tambahan Pertemuan Baru
+        var daftarPertemuan = JSON.parse(localStorage.getItem("pertemuanTambahan") || "[]");
+        var elemenPertemuan = document.getElementById("pertemuan");
+        if(elemenPertemuan) {
+            daftarPertemuan.forEach(function(item) {
+                var opsiHTML = '<option value="' + item + '">' + item + '</option>';
+                elemenPertemuan.insertAdjacentHTML('beforeend', opsiHTML);
+            });
+        }
     }
 
     function toggleEditMenu() {
@@ -283,6 +312,22 @@
         alert("Berhasil! " + nama + " ditambahkan ke Sesi " + sesi);
         document.getElementById("editNamaTambah").value = "";
         document.getElementById("editKelasTambah").value = "";
+    }
+
+    function prosesTambahPertemuan() {
+        var namaPertemuan = document.getElementById("editNamaPertemuan").value;
+        if(!namaPertemuan) { alert("Isi nama pertemuannya terlebih dahulu!"); return; }
+
+        var listPertemuan = JSON.parse(localStorage.getItem("pertemuanTambahan") || "[]");
+        listPertemuan.push(namaPertemuan);
+        localStorage.setItem("pertemuanTambahan", JSON.stringify(listPertemuan));
+
+        // Langsung tambahkan ke dropdown
+        var elemenPertemuan = document.getElementById("pertemuan");
+        elemenPertemuan.insertAdjacentHTML('beforeend', '<option value="' + namaPertemuan + '">' + namaPertemuan + '</option>');
+
+        alert("Berhasil! " + namaPertemuan + " ditambahkan ke daftar pertemuan.");
+        document.getElementById("editNamaPertemuan").value = "";
     }
 
     function muatDaftarHapus() {
@@ -323,9 +368,10 @@
     }
 
     function resetSemuaEdit() {
-        if(confirm("YAKIN? Ini akan MENGHAPUS semua anak baru yang pernah Anda tambahkan, dan MENGEMBALIKAN anak yang sudah Anda hapus. Sistem akan mereset murni ke bawaan pabrik.")) {
+        if(confirm("YAKIN? Ini akan MENGHAPUS semua anak/pertemuan baru yang pernah ditambahkan, dan MENGEMBALIKAN anak yang sudah dihapus. Sistem akan mereset murni ke bawaan pabrik.")) {
             localStorage.removeItem("siswaTambahan");
             localStorage.removeItem("siswaDihapus");
+            localStorage.removeItem("pertemuanTambahan");
             location.reload(); // Refresh halaman
         }
     }
