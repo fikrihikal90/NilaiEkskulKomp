@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nilai Ekskul Komputer - SDN Ciluar 1</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 15px; color: #333; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        h2 { text-align: center; color: #2563eb; margin-top: 0; border-bottom: 2px solid #e5e7eb; padding-bottom: 12px; font-size: 1.4rem;}
+        
+        .form-group { margin-bottom: 16px; }
+        label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 0.9rem; color: #4b5563;}
+        
+        select, input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 1rem; 
+            background: #fff; 
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        select { background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234b5563%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
+        select:focus, input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        .section-title { margin-top: 25px; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; font-size: 1.1rem; color: #1f2937; margin-bottom: 15px;}
+        
+        .btn-simpan { width: 100%; padding: 16px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 6px rgba(37,99,235,0.2); }
+        .btn-simpan:hover { background-color: #1d4ed8; }
+        
+        .hasil-box { background: #f0f9ff; padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px; border: 2px dashed #38bdf8; }
+        .nilai-akhir { font-size: 2.8rem; font-weight: bold; color: #0369a1; margin: 5px 0;}
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
+        th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+        th { background-color: #2563eb; color: white; }
+        
+        .btn-hapus { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+        .btn-export { background: #10b981; color: white; border: none; padding: 12px 15px; border-radius: 8px; cursor: pointer; margin-top: 20px; font-weight: bold; width: 100%;}
+        
+        /* CSS KHUSUS DROPDOWN & MENU EDIT */
+        .dropdown-nama { display: none; }
+        .btn-menu-edit { background: #4b5563; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
+        .edit-box { background: #e5e7eb; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; border: 1px solid #d1d5db; }
+        .btn-tambah { background: #16a34a; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-hapus-siswa { background: #dc2626; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-reset-edit { background: #6b7280; color: white; border: none; padding: 8px; border-radius: 6px; width: 100%; font-size:0.8rem; cursor: pointer; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>💻 Penilaian Ekskul Komputer</h2>
+
+    <!-- TOMBOL BUKA TUTUP MENU EDIT -->
+    <button type="button" class="btn-menu-edit" onclick="toggleEditMenu()">⚙️ Pengaturan Tambah / Hapus Siswa</button>
+
+    <!-- KOTAK MENU EDIT (Awalnya Tersembunyi) -->
+    <div id="menuEdit" class="edit-box">
+        <h4 style="margin-top:0; color:#1f2937; border-bottom:1px solid #ccc; padding-bottom:5px;">➕ Tambah Siswa Baru</h4>
+        <div class="form-group">
+            <select id="editSesiTambah">
+                <option value="">-- Pilih Sesi Anak Baru --</option>
+                <option value="sel1">Selasa Sesi 1</option><option value="sel2">Selasa Sesi 2</option><option value="sel3">Selasa Sesi 3</option><option value="sel4">Selasa Sesi 4</option>
+                <option value="jum1">Jumat Sesi 1</option><option value="jum2">Jumat Sesi 2</option><option value="jum3">Jumat Sesi 3</option><option value="jum4">Jumat Sesi 4</option>
+            </select>
+        </div>
+        <div class="grid-2">
+            <input type="text" id="editNamaTambah" placeholder="Ketik Nama Siswa">
+            <input type="text" id="editKelasTambah" placeholder="Kelas (Misal: 4A)">
+        </div>
+        <button type="button" class="btn-tambah" onclick="prosesTambahSiswa()">Simpan Siswa Baru</button>
+
+        <h4 style="margin-top:20px; color:#1f2937; border-bottom:1px solid #ccc; padding-bottom:5px;">🗑️ Hapus Siswa</h4>
+        <div class="form-group">
+            <select id="editSesiHapus" onchange="muatDaftarHapus()">
+                <option value="">-- Pilih Sesi Siswa Keluar --</option>
+                <option value="sel1">Selasa Sesi 1</option><option value="sel2">Selasa Sesi 2</option><option value="sel3">Selasa Sesi 3</option><option value="sel4">Selasa Sesi 4</option>
+                <option value="jum1">Jumat Sesi 1</option><option value="jum2">Jumat Sesi 2</option><option value="jum3">Jumat Sesi 3</option><option value="jum4">Jumat Sesi 4</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="editNamaHapus">
+                <option value="">-- Pilih Nama untuk Dihapus --</option>
+            </select>
+        </div>
+        <button type="button" class="btn-hapus-siswa" onclick="prosesHapusSiswa()">Hapus Siswa dari Daftar</button>
+
+        <button type="button" class="btn-reset-edit" onclick="resetSemuaEdit()">🔄 Kembalikan ke Daftar Asli Bawaan Sistem</button>
+    </div>
+
+    <!-- FORM UTAMA -->
+    <form id="formPenilaian" onsubmit="simpanData(event)">
+        
+        <div class="section-title">👨‍🎓 1. Data Siswa</div>
+        
+        <div class="form-group">
+            <label>Pilih Jadwal Sesi</label>
+            <select id="pilihSesi" required onchange="gantiDropdownNama()">
+                <option value="">-- Sentuh untuk Pilih Sesi --</option>
+                <option value="sel1">Selasa - Sesi 1 (09.00 - 10.00)</option>
+                <option value="sel2">Selasa - Sesi 2 (10.15 - 11.15)</option>
+                <option value="sel3">Selasa - Sesi 3 (12.30 - 13.30)</option>
+                <option value="sel4">Selasa - Sesi 4 (13.45 - 14.45)</option>
+                <option value="jum1">Jumat - Sesi 1 (09.00 - 10.00)</option>
+                <option value="jum2">Jumat - Sesi 2 (10.15 - 11.15)</option>
+                <option value="jum3">Jumat - Sesi 3 (13.00 - 14.00)</option>
+                <option value="jum4">Jumat - Sesi 4 (14.15 - 15.15)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Pilih Nama Siswa</label>
+            
+            <select id="defaultNama" class="dropdown-nama" style="display:block;">
+                <option value="">-- Pilih Sesi Terlebih Dahulu --</option>
+            </select>
+
+            <!-- KUMPULAN SELECT NAMA ASLI BAWAAN -->
+            <select id="sel1" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Abdul azis|4B">Abdul azis</option><option value="ALIKA OKTAVIA|4B">ALIKA OKTAVIA</option><option value="Annisa Nur maulida|4B">Annisa Nur maulida</option><option value="AQILA RAMADHINA AHMAD|4B">AQILA RAMADHINA AHMAD</option><option value="Aulia Dwi Putri|4B">Aulia Dwi Putri</option><option value="daniel|4A">daniel</option><option value="M alkafi pratama|4A">M alkafi pratama</option><option value="M. Algi fahri|4C">M. Algi fahri</option><option value="M. ZIDAN ARKAN|4B">M. ZIDAN ARKAN</option><option value="M.Ilham Anugrah|4B">M.Ilham Anugrah</option><option value="Mawar aprilia|4B">Mawar aprilia</option><option value="Mikaila Andhisni|4A">Mikaila Andhisni</option><option value="Muhamad syafe' i firdaus|4B">Muhamad syafe' i firdaus</option><option value="NUR HALIZA|4B">NUR HALIZA</option><option value="Raden Dava Syahputra|4C">Raden Dava Syahputra</option><option value="Sesillia|4C">Sesillia</option><option value="Siti mariah|5B">Siti mariah</option><option value="Siti robiatul adawiah|4A">Siti robiatul adawiah</option><option value="Siti sa'adah Zulfa|4C">Siti sa'adah Zulfa</option><option value="Syakira khumairaal zahrani|5A">Syakira khumairaal zahrani</option></select>
+            <select id="sel2" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Achmad ghalih nur alamsyah|5A">Achmad ghalih nur alamsyah</option><option value="Alby luthfy anggriawan|4A">Alby luthfy anggriawan</option><option value="Ardina sapira|6A">Ardina sapira</option><option value="Azkiya kinara azzahra|6B">Azkiya kinara azzahra</option><option value="Bilqis khoridatul bariah|5B">Bilqis khoridatul bariah</option><option value="Diandra wahyu kirania|5B">Diandra wahyu kirania</option><option value="Dinar layla ramadhan|6A">Dinar layla ramadhan</option><option value="LAILAH TAZQIAH NAFSI|6A">LAILAH TAZQIAH NAFSI</option><option value="M teguh al rizki|6B">M teguh al rizki</option><option value="M.farid Awalludin|6A">M.farid Awalludin</option><option value="M.saka|4A">M.saka</option><option value="Muhamad julfan saprudin|6B">Muhamad julfan saprudin</option><option value="muhamad rizki|6B">muhamad rizki</option><option value="Muhammad alfariz nurdiansah|6A">Muhammad alfariz nurdiansah</option><option value="Muhammad saka Wiratama|4A">Muhammad saka Wiratama</option><option value="Nathania nanda zhafitri|4C">Nathania nanda zhafitri</option><option value="Nayla humarya zidni|5A">Nayla humarya zidni</option><option value="Raden Rivania Azmavida|4A">Raden Rivania Azmavida</option><option value="Robi Maulana|4A">Robi Maulana</option><option value="Sabrina Anisa putri iskndar|6A">Sabrina Anisa putri iskndar</option></select>
+            <select id="sel3" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Afika Aulia az'zahra|6A">Afika Aulia az'zahra</option><option value="Arsyil aditia sanjaya|6A">Arsyil aditia sanjaya</option><option value="Citra Inaya|6A">Citra Inaya</option><option value="Fahri Alfar Herdiana|5B">Fahri Alfar Herdiana</option><option value="Kenzo putra Rahman|6B">Kenzo putra Rahman</option><option value="M. Ramdhani Fadilah|5B">M. Ramdhani Fadilah</option><option value="M.QURO SALIM MUBAROK|6B">M.QURO SALIM MUBAROK</option><option value="Mahira Alesha najwa|5A">Mahira Alesha najwa</option><option value="meydiva aprilia putri|6B">meydiva aprilia putri</option><option value="Muhamad akmal Maulana|5A">Muhamad akmal Maulana</option><option value="Muhamad Jabbar mukti|6B">Muhamad Jabbar mukti</option><option value="Muhamad Rifki zaelani|5B">Muhamad Rifki zaelani</option><option value="Muhammad Fadlan Ramdani|6A">Muhammad Fadlan Ramdani</option><option value="Muhammad nizam|5A">Muhammad nizam</option><option value="Muhammad Wildan Aydin Mawlana|5B">Muhammad Wildan Aydin Mawlana</option><option value="MUHAMMAD YUSUF|6B">MUHAMMAD YUSUF</option><option value="Pamela Safinah|6B">Pamela Safinah</option><option value="Widyanursaidah|5A">Widyanursaidah</option><option value="windadari|6B">windadari</option><option value="zetrisqia alqindi deanna putra|6A">zetrisqia alqindi deanna putra</option></select>
+            <select id="sel4" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Ahmad maklum|6B">Ahmad maklum</option><option value="Alvin Faeyza Shakil|6B">Alvin Faeyza Shakil</option><option value="Amelya chintya sekar dewi|6A">Amelya chintya sekar dewi</option><option value="Aqila nur sabrina|6B">Aqila nur sabrina</option><option value="Audi Tabina|5B">Audi Tabina</option><option value="AZKIA KHOERUNISA|6A">AZKIA KHOERUNISA</option><option value="Azzahra Asyila Rahma|6B">Azzahra Asyila Rahma</option><option value="Dina putri kheyira|6B">Dina putri kheyira</option><option value="H. Padli|6B">H. Padli</option><option value="Haniva zahra|6B">Haniva zahra</option><option value="M.Adin Al Khalifi|6B">M.Adin Al Khalifi</option><option value="Muhamad Dzaki Firdaus|6B">Muhamad Dzaki Firdaus</option><option value="Muhamad Fatih aldzanki|6A">Muhamad Fatih aldzanki</option><option value="muhammad adhari cahya gumelar|5B">muhammad adhari cahya gumelar</option><option value="Muhammad Azzam Zakaria|6B">Muhammad Azzam Zakaria</option><option value="nadhif ghani|5B">nadhif ghani</option><option value="Nafisa|6B">Nafisa</option><option value="nur akila rahma|6B">nur akila rahma</option><option value="Siti Aulia Natasa|5B">Siti Aulia Natasa</option><option value="Yarisman gulo|6B">Yarisman gulo</option></select>
+            <select id="jum1" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Aisyah isna yamani|4B">Aisyah isna yamani</option><option value="Ajrin Al maliki|4B">Ajrin Al maliki</option><option value="Aulia Bilqis|4C">Aulia Bilqis</option><option value="Dian harani|4C">Dian harani</option><option value="Elsa Sahilla Ramadani|4B">Elsa Sahilla Ramadani</option><option value="Fakhriyyah Bilqis|4A">Fakhriyyah Bilqis</option><option value="Kayla zakiatun nisa|4C">Kayla zakiatun nisa</option><option value="M.irsyad padil|4A">M.irsyad padil</option><option value="M.kholifatu Arsya F|4C">M.kholifatu Arsya F</option><option value="Maula Alkhansa Hasanah|4A">Maula Alkhansa Hasanah</option><option value="Muhamad azka ar rasyid|4B">Muhamad azka ar rasyid</option><option value="Muhamad Fatir Ar Rasyid|4C">Muhamad Fatir Ar Rasyid</option><option value="Muhammad Chairul Afdal|4B">Muhammad Chairul Afdal</option><option value="Muhammad Khalifah Boza Nur Rabbani|4C">Muhammad Khalifah Boza Nur Rabbani</option><option value="Najma Syarifah|4C">Najma Syarifah</option><option value="Raden Jahira Amaliah Bilqis|5A">Raden Jahira Amaliah Bilqis</option><option value="Rama dani saputra|4B">Rama dani saputra</option><option value="Siti maritul kibdiah|4A">Siti maritul kibdiah</option><option value="SITI SYAIDAH NUR ALIYAH|4C">SITI SYAIDAH NUR ALIYAH</option><option value="Siti zamilatunnazma|4A">Siti zamilatunnazma</option></select>
+            <select id="jum2" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Almira Izzatunisa|4B">Almira Izzatunisa</option><option value="daffa ahmad fairuz|6A">daffa ahmad fairuz</option><option value="Indah fatyah|5A">Indah fatyah</option><option value="M AKHDAN Al fahri|5B">M AKHDAN Al fahri</option><option value="M Davin Maulana|6A">M Davin Maulana</option><option value="M Hafizh firdaus|5B">M Hafizh firdaus</option><option value="M. Albi AF|4B">M. Albi AF</option><option value="M.ardiansah s.p|6A">M.ardiansah s.p</option><option value="M.sarip hidayat tuloh|4A">M.sarip hidayat tuloh</option><option value="Muhammad Bagir|5A">Muhammad Bagir</option><option value="muhammad fadil abdul kahfi|6A">muhammad fadil abdul kahfi</option><option value="Natasha c fricilla|5A">Natasha c fricilla</option><option value="NATHANIA NANDA ZHAFITRI|4C">NATHANIA NANDA ZHAFITRI</option><option value="Naura Nayara|4A">Naura Nayara</option><option value="riandi rahmat fajar|6A">riandi rahmat fajar</option><option value="Riska Febriana|5A">Riska Febriana</option><option value="Siti syakinah nur Irawan|4B">Siti syakinah nur Irawan</option><option value="Siti zahra|5A">Siti zahra</option><option value="UFAIRA NUR AFIFA|5A">UFAIRA NUR AFIFA</option></select>
+            <select id="jum3" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="ADERA AZZAHRA|5A">ADERA AZZAHRA</option><option value="Afril Intan Syafitri|5B">Afril Intan Syafitri</option><option value="Aisyah|5B">Aisyah</option><option value="Arsy tasyawal pauziyah|5A">Arsy tasyawal pauziyah</option><option value="Ashodikul Putra Abdulloh|5A">Ashodikul Putra Abdulloh</option><option value="Dzikra Naura Sudrajat|5B">Dzikra Naura Sudrajat</option><option value="Ira novita|6A">Ira novita</option><option value="Kanaya aljahira|5A">Kanaya aljahira</option><option value="M Davin maulana|6A">M Davin maulana</option><option value="MOHAMAD WIRA AL FAHRI|5B">MOHAMAD WIRA AL FAHRI</option><option value="Muhammad Akbar Rasyd|6B">Muhammad Akbar Rasyd</option><option value="MUHAMMAD RADEN AZMI ALMALIK|5A">MUHAMMAD RADEN AZMI ALMALIK</option><option value="Muhammad Rizqi Abdullah|5A">Muhammad Rizqi Abdullah</option><option value="Nadia Azkal Azkia|5B">Nadia Azkal Azkia</option><option value="NINDI ELIS|6A">NINDI ELIS</option><option value="Rafa Nur Ahmad|5B">Rafa Nur Ahmad</option><option value="Silvy lingga syafitri|6A">Silvy lingga syafitri</option><option value="Siti nuranisa|5B">Siti nuranisa</option><option value="Siti windayani|5A">Siti windayani</option><option value="Syafiyya amira adesya|5B">Syafiyya amira adesya</option></select>
+            <select id="jum4" class="dropdown-nama" onchange="isiKelas(this)"><option value="">-- Sentuh untuk Pilih Nama --</option><option value="Aenur|5B">Aenur</option><option value="Ahmad fathir|6A">Ahmad fathir</option><option value="Ahmad fathur|6B">Ahmad fathur</option><option value="Alsyifa nur aulia|5B">Alsyifa nur aulia</option><option value="alya adriana|5B">alya adriana</option><option value="ARSYAD SYABIL FATURRAHMAN|4C">ARSYAD SYABIL FATURRAHMAN</option><option value="ASSYFA BILQISH MALAYEKA|4A">ASSYFA BILQISH MALAYEKA</option><option value="auliana tasya|5B">auliana tasya</option><option value="Azka dwi putra prayitno|4A">Azka dwi putra prayitno</option><option value="Dasya Aprilia Lase|5B">Dasya Aprilia Lase</option><option value="DPIKRA|5A">DPIKRA</option><option value="FILDZAH SHAKILA ADHANA|5A">FILDZAH SHAKILA ADHANA</option><option value="Johanes Reyvandio|4A">Johanes Reyvandio</option><option value="M. RAFA MAULANA|5A">M. RAFA MAULANA</option><option value="M.alfaridzi|4B">M.alfaridzi</option><option value="Nadia Azkal Azkia|5B">Nadia Azkal Azkia</option><option value="Nayla azzahra Nur sahidah|5B">Nayla azzahra Nur sahidah</option><option value="siti azkia khoirun nisa|5B">siti azkia khoirun nisa</option><option value="SYAKIA NURSALSABILA|5A">SYAKIA NURSALSABILA</option><option value="THORIQ YASIR|5B">THORIQ YASIR</option></select>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" id="kelas" readonly style="background:#f3f4f6; color:#6b7280; font-weight:bold;" placeholder="Otomatis">
+            </div>
+            <div class="form-group">
+                <label>Kehadiran</label>
+                <select id="kehadiran">
+                    <option value="Hadir">Hadir</option>
+                    <option value="Izin">Izin</option>
+                    <option value="Sakit">Sakit</option>
+                    <option value="Alpa">Alpa</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Pertemuan Ke-</label>
+            <select id="pertemuan" required>
+                <option value="Pertemuan 1">Pertemuan 1</option>
+                <option value="Pertemuan 2">Pertemuan 2</option>
+                <option value="Pertemuan 3">Pertemuan 3</option>
+                <option value="Pertemuan 4">Pertemuan 4</option>
+                <option value="Pertemuan 5">Pertemuan 5</option>
+                <option value="Pertemuan 6">Pertemuan 6</option>
+            </select>
+        </div>
+
+        <div class="section-title">💯 2. Komponen Nilai Otomatis</div>
+        
+        <div class="form-group">
+            <label>💻 Praktik (Bobot 60%)</label>
+            <select id="n_prak" required onchange="hitungLive()">
+                <option value="">-- Pilih Hasil Praktik Siswa --</option>
+                <option value="95">⭐⭐⭐⭐ Sangat Mandiri & Cepat (95)</option>
+                <option value="85">⭐⭐⭐ Lancar dengan Sedikit Bantuan (85)</option>
+                <option value="75">⭐⭐ Cukup Bisa, Perlu Dibimbing (75)</option>
+                <option value="65">⭐ Belum Mampu Menyelesaikan (65)</option>
+                <option value="0">❌ Tidak Mengerjakan / Alpa (0)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>🧠 Pemahaman Materi (Bobot 20%)</label>
+            <select id="n_pem" required onchange="hitungLive()">
+                <option value="">-- Pilih Tingkat Pemahaman --</option>
+                <option value="95">⭐⭐⭐⭐ Sangat Paham Fungsi & Tombol (95)</option>
+                <option value="85">⭐⭐⭐ Paham Sebagian Besar Materi (85)</option>
+                <option value="75">⭐⭐ Mulai Paham, Tapi Sering Lupa (75)</option>
+                <option value="65">⭐ Kurang Fokus / Tidak Paham (65)</option>
+                <option value="0">❌ Alpa (0)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>🤝 Sikap & Kedisiplinan (Bobot 20%)</label>
+            <select id="n_sik" required onchange="hitungLive()">
+                <option value="">-- Pilih Sikap Siswa --</option>
+                <option value="95">⭐⭐⭐⭐ Sangat Fokus, Tertib & Sopan (95)</option>
+                <option value="85">⭐⭐⭐ Tertib & Mengikuti Arahan (85)</option>
+                <option value="75">⭐⭐ Kadang Bercanda / Kurang Fokus (75)</option>
+                <option value="60">⭐ Sulit Diatur / Mengganggu Teman (60)</option>
+                <option value="0">❌ Alpa (0)</option>
+            </select>
+        </div>
+
+        <div class="hasil-box">
+            <div style="color: #0369a1; font-weight: bold;">TOTAL NILAI AKHIR:</div>
+            <div class="nilai-akhir" id="tampilTotal">0.00</div>
+            <div id="tampilPredikat" style="font-weight: bold; color: #dc2626; font-size: 1.2rem;">Menunggu Input...</div>
+        </div>
+
+        <button type="submit" class="btn-simpan">💾 SIMPAN & LANJUT SISWA BERIKUTNYA</button>
+    </form>
+
+    <hr style="margin: 35px 0; border: 1px solid #e5e7eb;">
+
+    <h2 style="font-size: 1.2rem;">📊 Rekap Nilai Masuk</h2>
+    <div style="overflow-x: auto; background: white; border-radius: 8px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pert.</th>
+                    <th>Nama Siswa</th>
+                    <th>Kls</th>
+                    <th>Total</th>
+                    <th>Pred</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelData">
+                <!-- Data masuk ke sini -->
+            </tbody>
+        </table>
+    </div>
+    <button class="btn-export" onclick="exportExcel()">📥 Download Rekap ke Excel</button>
+
+</div>
+
+<script>
+    // FUNGSI KHUSUS MENU EDIT SISWA -------------------------------------------
+    
+    // Terapkan penambahan dan penghapusan saat halaman dibuka
+    function terapkanPatchSiswa() {
+        // 1. Terapkan Siswa Dihapus
+        var daftarDihapus = JSON.parse(localStorage.getItem("siswaDihapus") || "[]");
+        daftarDihapus.forEach(function(item) {
+            var elemenSelect = document.getElementById(item.sesi);
+            if(elemenSelect) {
+                for(var i = elemenSelect.options.length - 1; i >= 0; i--) {
+                    if(elemenSelect.options[i].value === item.data) {
+                        elemenSelect.remove(i);
+                    }
+                }
+            }
+        });
+
+        // 2. Terapkan Tambahan Siswa Baru
+        var daftarTambahan = JSON.parse(localStorage.getItem("siswaTambahan") || "[]");
+        daftarTambahan.forEach(function(item) {
+            var elemenSelect = document.getElementById(item.sesi);
+            if(elemenSelect) {
+                var opsiHTML = '<option value="' + item.nama + '|' + item.kelas + '">' + item.nama + '</option>';
+                elemenSelect.insertAdjacentHTML('beforeend', opsiHTML);
+            }
+        });
+    }
+
+    function toggleEditMenu() {
+        var menu = document.getElementById("menuEdit");
+        menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+    }
+
+    function prosesTambahSiswa() {
+        var sesi = document.getElementById("editSesiTambah").value;
+        var nama = document.getElementById("editNamaTambah").value;
+        var kelas = document.getElementById("editKelasTambah").value;
+        
+        if(!sesi || !nama || !kelas) { alert("Semua kolom Tambah Siswa wajib diisi!"); return; }
+
+        var listSiswa = JSON.parse(localStorage.getItem("siswaTambahan") || "[]");
+        listSiswa.push({ sesi: sesi, nama: nama, kelas: kelas });
+        localStorage.setItem("siswaTambahan", JSON.stringify(listSiswa));
+
+        // Langsung tampilkan ke form
+        var elemenSelect = document.getElementById(sesi);
+        elemenSelect.insertAdjacentHTML('beforeend', '<option value="' + nama + '|' + kelas + '">' + nama + '</option>');
+
+        alert("Berhasil! " + nama + " ditambahkan ke Sesi " + sesi);
+        document.getElementById("editNamaTambah").value = "";
+        document.getElementById("editKelasTambah").value = "";
+    }
+
+    function muatDaftarHapus() {
+        var sesi = document.getElementById("editSesiHapus").value;
+        var dropdownHapus = document.getElementById("editNamaHapus");
+        dropdownHapus.innerHTML = '<option value="">-- Pilih Nama untuk Dihapus --</option>';
+
+        if(sesi) {
+            var elemenPilih = document.getElementById(sesi);
+            for(var i = 1; i < elemenPilih.options.length; i++) {
+                dropdownHapus.innerHTML += '<option value="' + elemenPilih.options[i].value + '">' + elemenPilih.options[i].text + '</option>';
+            }
+        }
+    }
+
+    function prosesHapusSiswa() {
+        var sesi = document.getElementById("editSesiHapus").value;
+        var dataSiswa = document.getElementById("editNamaHapus").value;
+
+        if(!sesi || !dataSiswa) { alert("Pilih sesi dan nama yang mau dihapus!"); return; }
+
+        // Simpan riwayat hapus
+        var listDihapus = JSON.parse(localStorage.getItem("siswaDihapus") || "[]");
+        listDihapus.push({ sesi: sesi, data: dataSiswa });
+        localStorage.setItem("siswaDihapus", JSON.stringify(listDihapus));
+
+        // Hapus dari form langsung
+        var elemenSelect = document.getElementById(sesi);
+        for(var i = 0; i < elemenSelect.options.length; i++) {
+            if(elemenSelect.options[i].value === dataSiswa) {
+                elemenSelect.remove(i);
+                break;
+            }
+        }
+        
+        alert("Siswa berhasil dihapus dari sistem!");
+        muatDaftarHapus(); // Refresh menu hapus
+    }
+
+    function resetSemuaEdit() {
+        if(confirm("YAKIN? Ini akan MENGHAPUS semua anak baru yang pernah Anda tambahkan, dan MENGEMBALIKAN anak yang sudah Anda hapus. Sistem akan mereset murni ke bawaan pabrik.")) {
+            localStorage.removeItem("siswaTambahan");
+            localStorage.removeItem("siswaDihapus");
+            location.reload(); // Refresh halaman
+        }
+    }
+
+    // FUNGSI UTAMA PENILAIAN --------------------------------------------------
+
+    function gantiDropdownNama() {
+        var sesiPilih = document.getElementById("pilihSesi").value;
+        var semuaDropdown = document.querySelectorAll('.dropdown-nama');
+        for (var i = 0; i < semuaDropdown.length; i++) {
+            semuaDropdown[i].style.display = 'none';
+            semuaDropdown[i].value = ''; 
+        }
+        document.getElementById("kelas").value = "";
+
+        if (sesiPilih !== "") {
+            document.getElementById(sesiPilih).style.display = 'block';
+        } else {
+            document.getElementById("defaultNama").style.display = 'block';
+        }
+    }
+
+    function isiKelas(elemenSelect) {
+        var pilihan = elemenSelect.value;
+        if(pilihan !== "") {
+            var data = pilihan.split("|");
+            document.getElementById("kelas").value = data[1]; 
+        } else {
+            document.getElementById("kelas").value = "";
+        }
+    }
+
+    function hitungLive() {
+        var p = parseFloat(document.getElementById("n_prak").value) || 0;
+        var m = parseFloat(document.getElementById("n_pem").value) || 0;
+        var s = parseFloat(document.getElementById("n_sik").value) || 0;
+
+        var total = (p * 0.60) + (m * 0.20) + (s * 0.20);
+        
+        if (p === 0 && m === 0 && s === 0) {
+            document.getElementById("tampilTotal").innerText = "0.00";
+            document.getElementById("tampilPredikat").innerText = "Menunggu Input...";
+            document.getElementById("tampilPredikat").style.color = "#dc2626";
+            return;
+        }
+        
+        var pred = "D (Kurang)"; var warna = "#dc2626";
+        if(total >= 90) { pred = "A (Sangat Baik)"; warna = "#16a34a"; }
+        else if(total >= 80) { pred = "B (Baik)"; warna = "#2563eb"; }
+        else if(total >= 70) { pred = "C (Cukup)"; warna = "#d97706"; }
+
+        document.getElementById("tampilTotal").innerText = total.toFixed(2);
+        document.getElementById("tampilPredikat").innerText = "Predikat: " + pred;
+        document.getElementById("tampilPredikat").style.color = warna;
+    }
+
+    var rekapNilai = JSON.parse(localStorage.getItem('rekapEkskul')) || [];
+
+    function simpanData(e) {
+        e.preventDefault();
+        
+        var sesiPilih = document.getElementById("pilihSesi").value;
+        if(sesiPilih === "") { alert("Mohon pilih Sesi terlebih dahulu!"); return; }
+
+        var dropdownAktif = document.getElementById(sesiPilih);
+        var pilihanSiswa = dropdownAktif.value;
+        
+        if(pilihanSiswa === "") { alert("Mohon pilih Nama Siswa!"); return; }
+
+        var p = parseFloat(document.getElementById("n_prak").value) || 0;
+        var m = parseFloat(document.getElementById("n_pem").value) || 0;
+        var s = parseFloat(document.getElementById("n_sik").value) || 0;
+        
+        var total = (p * 0.60) + (m * 0.20) + (s * 0.20);
+        var pred = total >= 90 ? 'A' : total >= 80 ? 'B' : total >= 70 ? 'C' : 'D';
+        var teksSesi = document.getElementById("pilihSesi").options[document.getElementById("pilihSesi").selectedIndex].text;
+
+        var dataBaru = {
+            id: new Date().getTime(),
+            sesi: teksSesi,
+            nama: pilihanSiswa.split("|")[0],
+            kelas: document.getElementById("kelas").value,
+            kehadiran: document.getElementById("kehadiran").value,
+            pertemuan: document.getElementById("pertemuan").value,
+            n_prak: p, n_pem: m, n_sik: s,
+            total: total.toFixed(2),
+            predikat: pred
+        };
+
+        rekapNilai.push(dataBaru);
+        localStorage.setItem('rekapEkskul', JSON.stringify(rekapNilai));
+
+        alert("✅ Nilai " + dataBaru.nama + " Berhasil Disimpan!");
+        muatTabel();
+        
+        document.getElementById("n_prak").value = "";
+        document.getElementById("n_pem").value = "";
+        document.getElementById("n_sik").value = "";
+        dropdownAktif.value = ""; 
+        document.getElementById("kelas").value = "";
+        hitungLive();
+    }
+
+    function muatTabel() {
+        var tabel = document.getElementById("tabelData");
+        tabel.innerHTML = "";
+        for(var i = rekapNilai.length - 1; i >= 0; i--) { 
+            var row = rekapNilai[i];
+            tabel.innerHTML += 
+                '<tr>' +
+                '<td>' + row.pertemuan + '</td>' +
+                '<td><strong>' + row.nama + '</strong></td>' +
+                '<td>' + row.kelas + '</td>' +
+                '<td><strong>' + row.total + '</strong></td>' +
+                '<td>' + row.predikat + '</td>' +
+                '<td><button class="btn-hapus" type="button" onclick="hapusBaris(' + row.id + ')">Hapus</button></td>' +
+                '</tr>';
+        }
+    }
+
+    function hapusBaris(id) {
+        if(confirm("Yakin hapus nilai data ini?")) {
+            rekapNilai = rekapNilai.filter(function(row) { return row.id !== id; });
+            localStorage.setItem('rekapEkskul', JSON.stringify(rekapNilai));
+            muatTabel();
+        }
+    }
+
+    function exportExcel() {
+        if(rekapNilai.length === 0) { alert("Belum ada data!"); return; }
+        var csv = "Sesi,Pertemuan,Nama Siswa,Kelas,Kehadiran,Nilai Praktik,Nilai Pemahaman,Nilai Sikap,Total Akhir,Predikat\n";
+        
+        for(var i=0; i<rekapNilai.length; i++) {
+            var r = rekapNilai[i];
+            csv += r.sesi + "," + r.pertemuan + "," + r.nama + "," + r.kelas + "," + r.kehadiran + "," + r.n_prak + "," + r.n_pem + "," + r.n_sik + "," + r.total + "," + r.predikat + "\n";
+        }
+        
+        var link = document.createElement("a");
+        link.setAttribute("href", encodeURI("data:text/csv;charset=utf-8," + csv));
+        link.setAttribute("download", "Laporan_Nilai.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Eksekusi Paling Awal
+    terapkanPatchSiswa();
+    gantiDropdownNama();
+    muatTabel();
+</script>
+</body>
+</html>
